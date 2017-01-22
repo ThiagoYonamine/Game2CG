@@ -25,11 +25,11 @@ public class MainGameLoop {
         Renderer renderer = new Renderer(shader);
          
 
-        RawModel model = OBJLoader.loadObjModel("stall", loader);
+        RawModel model = OBJLoader.loadObjModel("grass2", loader);
          
-        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("stall")));
+        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("grass")));
          
-        Entity entity = new Entity(staticModel, new Vector3f(0,-5,-30),0,0,0,1);
+        Entity entity = new Entity(staticModel, new Vector3f(0,-3,-10),0,0,0,1);
          
         Camera camera = new Camera();
          
