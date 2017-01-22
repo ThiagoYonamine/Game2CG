@@ -14,6 +14,7 @@ import shaders.StaticShader;
 import Textures.ModelTexture;
 import entities.Camera;
 import entities.Entity;
+import entities.Light;
  
 public class MainGameLoop {
  
@@ -25,19 +26,22 @@ public class MainGameLoop {
         Renderer renderer = new Renderer(shader);
          
 
-        RawModel model = OBJLoader.loadObjModel("grass2", loader);
+        RawModel model = OBJLoader.loadObjModel("dragon", loader);
          
-        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("grass")));
-         
-        Entity entity = new Entity(staticModel, new Vector3f(0,-3,-10),0,0,0,1);
-         
+        TexturedModel staticModel = new TexturedModel(model,new ModelTexture(loader.loadTexture("white")));
+         //entity (textura,new Vector3f(POSITION),ROTATION, SCALE);
+        Entity entity = new Entity(staticModel, new Vector3f(0,-5,-25),0,0,0,1);
+        //Luz (location, color)
+         Light light =new Light(new Vector3f(0,0,-20),new Vector3f(1,1,1));
+        
         Camera camera = new Camera();
          
         while(!Display.isCloseRequested()){
             entity.increaseRotation(0, 1, 0);
             camera.move();
             renderer.prepare();
-            shader.start();
+            shader.start();  
+            shader.loadLight(light);
             shader.loadViewMatrix(camera);
             renderer.render(entity,shader);
             shader.stop();
