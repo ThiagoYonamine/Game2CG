@@ -67,6 +67,7 @@ public class MainGameLoop {
          
         while(!Display.isCloseRequested()){
             camera.move();
+            
              
             renderer.processTerrain(terrain);
             renderer.processTerrain(terrain2);
