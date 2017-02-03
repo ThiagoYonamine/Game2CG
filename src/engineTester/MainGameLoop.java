@@ -25,8 +25,8 @@ import entities.Player;
 
 public class MainGameLoop {
 
-	private final static int MIN_TREE_HEIGHT = 4;
-	private final static int MAX_TREE_HEIGHT = 12;
+	private final static int MIN_TREE_HEIGHT = 1;
+	private final static int MAX_TREE_HEIGHT = 4;
 
 	public static void main(String[] args) {
 
@@ -40,8 +40,8 @@ public class MainGameLoop {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 
-		RawModel model = OBJLoader.loadObjModel("tree", loader);
-		TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
+		RawModel model = OBJLoader.loadObjModel("pine", loader);
+		TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("pine")));
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
 		for (int i = 0; i < 500; i++) {
@@ -71,6 +71,17 @@ public class MainGameLoop {
 
 		// Entity entityDragon = new Entity(dragon, new Vector3f(0, 0, -40), 0,
 		// 0, 0, 1);
+		
+		RawModel model_arma = OBJLoader.loadObjModel("arma", loader);
+		TexturedModel tx_arma = new TexturedModel(model_arma, new ModelTexture(loader.loadTexture("arma")));
+		ModelTexture texture_arma = tx_arma.getTexture();
+		// Reflexo
+		texture_arma.setShineDamper(50); // tipo do material
+		texture_arma.setReflectivity(20); // reflexo
+		
+		
+		Entity entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), 0, 0, 0, 0.5f);
+		entityArma.increaseRotation(180, 0, 0);
 
 		Light light = new Light(new Vector3f(0, 50, -30), new Vector3f(1, 1, 1));
 
@@ -78,13 +89,15 @@ public class MainGameLoop {
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
 
 		MasterRender renderer = new MasterRender();
-		TexturedModel player_model = dragon;
+		TexturedModel player_model = tx_arma;
 
-		Player player = new Player(player_model, new Vector3f(100, 0, -50), 0, 0, 0, 1);
+		Player player = new Player(player_model, new Vector3f(100, 5, -50), 0, 0, 0, 0.5f);
+		player.increaseRotation(180, 0, 0);
+		
 
 		// hide the mouse
 		Mouse.setGrabbed(true);
-
+		
 		while (!Display.isCloseRequested()) {
 			player.move();
 
@@ -99,6 +112,10 @@ public class MainGameLoop {
 			}
 			// entityDragon.increaseRotation(0, 1, 0);
 			// renderer.processEntity(entityDragon);
+			entityArma.setPosition(new Vector3f(player.getPosition().x,player.getPosition().y,player.getPosition().z));
+			entityArma.setRotY(player.getRotY()*-1);
+			renderer.processEntity(entityArma);
+			
 			renderer.render(light, player.getCamera());
 			DisplayManager.updateDisplay();
 		}

@@ -45,7 +45,7 @@ public class Camera {
 		pitch -= pitchChange;
 
 		// Limita inclinação: não permite olhas pros pés
-		pitch = Math.min(pitch, 22);
+		pitch = Math.min(pitch, 90);
 	}
 
 }

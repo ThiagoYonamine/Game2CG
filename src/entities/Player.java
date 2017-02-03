@@ -10,17 +10,19 @@ import renderEngine.DisplayManager;
 public class Player extends Entity {
 
 	private static final float WALK_SPEED = 20f;
-	private static final float TURN_SPEED = 50;
+	private static final float TURN_SPEED = 10;
 	private static final float RUN_SPEED_FACTOR = 2f;
 
 	private float currentForwardSpeed = 0;
 	private float currentSidewardSpeed = 0;
 	private float currentTurnSpeed = 0;
+	
 
 	private Camera camera;
 
 	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
+		
 		camera = new Camera(this);
 	}
 
@@ -29,7 +31,8 @@ public class Player extends Entity {
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distanceForward = currentForwardSpeed * DisplayManager.getFrameTimeSeconds();
 		float distanceSideward = currentSidewardSpeed * DisplayManager.getFrameTimeSeconds();
-
+		
+		
 		walkForward(distanceForward);
 		walkSideward(distanceSideward);
 		this.camera.move();
