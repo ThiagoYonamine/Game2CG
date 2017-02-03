@@ -7,6 +7,7 @@ import java.util.Random;
 import models.RawModel;
 import models.TexturedModel;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -18,12 +19,14 @@ import terrains.Terrain;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
-import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
 
 public class MainGameLoop {
+
+	private final static int MIN_TREE_HEIGHT = 4;
+	private final static int MAX_TREE_HEIGHT = 12;
 
 	public static void main(String[] args) {
 
@@ -42,8 +45,9 @@ public class MainGameLoop {
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
 		for (int i = 0; i < 500; i++) {
+			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities.add(new Entity(staticModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
+					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, scale));
 		}
 
 		RawModel model2 = OBJLoader.loadObjModel("fern", loader);
@@ -53,8 +57,9 @@ public class MainGameLoop {
 
 		List<Entity> entities2 = new ArrayList<Entity>();
 		for (int i = 0; i < 200; i++) {
+			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities2.add(new Entity(staticModel2,
-					new Vector3f(random.nextFloat() * 800 - 400, -1f, random.nextFloat() * -600), 0, 0, 0, 1));
+					new Vector3f(random.nextFloat() * 800 - 400, -1f, random.nextFloat() * -600), 0, 0, 0, scale/10));
 		}
 
 		RawModel dragonOBJ = OBJLoader.loadObjModel("dragon", loader);
@@ -72,17 +77,18 @@ public class MainGameLoop {
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
 
-		Camera camera = new Camera();
 		MasterRender renderer = new MasterRender();
 		TexturedModel player_model = dragon;
 
-		Player player = new Player(player_model, new Vector3f(0, 0, -40), 0, (float) Math.PI / 4, 0, 1);
+		Player player = new Player(player_model, new Vector3f(100, 0, -50), 0, 0, 0, 1);
+
+		// hide the mouse
+		Mouse.setGrabbed(true);
 
 		while (!Display.isCloseRequested()) {
-			camera.move();
-//			player.move();
+			player.move();
 
-//			renderer.processEntity(player);
+			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			for (Entity entity : entities) {
@@ -93,7 +99,7 @@ public class MainGameLoop {
 			}
 			// entityDragon.increaseRotation(0, 1, 0);
 			// renderer.processEntity(entityDragon);
-			renderer.render(light, camera);
+			renderer.render(light, player.getCamera());
 			DisplayManager.updateDisplay();
 		}
 
