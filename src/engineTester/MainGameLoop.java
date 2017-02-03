@@ -59,7 +59,7 @@ public class MainGameLoop {
         }
         
         
-        RawModel dragonOBJ = OBJLoader.loadObjModel("gun", loader);
+        RawModel dragonOBJ = OBJLoader.loadObjModel("zombie2", loader);
         TexturedModel dragon = new TexturedModel(dragonOBJ,new ModelTexture(loader.loadTexture("zombie")));
         ModelTexture dragon_texture = dragon.getTexture();
         //Reflexo
