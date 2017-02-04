@@ -22,6 +22,7 @@ import Textures.TerrainTexturePack;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import entities.Zombie;
 
 public class MainGameLoop {
 
@@ -100,7 +101,14 @@ public class MainGameLoop {
 		Player player = new Player(player_model, new Vector3f(0, 5, 0), 0, 0, 0, 0.5f);
 		player.increaseRotation(180, 0, 0);
 		
-
+		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
+		TexturedModel tx_zombie = new TexturedModel(model_zombie, new ModelTexture(loader.loadTexture("Slasher")));	
+		//Zombie zombie = new Zombie(tx_zombie, new Vector3f(0, 5, -100), 0, 0, 0, 5);
+		List<Zombie> zombies = new ArrayList<Zombie>();
+		for (int i = 0; i < 20; i++) {
+			zombies.add(new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600), 0, 0, 0, 5));
+		}
+		
 		// hide the mouse
 		Mouse.setGrabbed(true);
 		
@@ -108,8 +116,12 @@ public class MainGameLoop {
 		while (!Display.isCloseRequested()) {
 			
 			player.move();
-
-			renderer.processEntity(player);
+			for(Zombie zombie : zombies){
+				zombie.move(player.getPosition(),player.getRotY());
+				renderer.processEntity(zombie);
+			}
+				
+			renderer.processEntity(player);	
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entityDragon); // 0 0 -40
