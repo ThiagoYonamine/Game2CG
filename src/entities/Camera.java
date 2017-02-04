@@ -1,57 +1,52 @@
 package entities;
- 
-import org.lwjgl.input.Keyboard;
+
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
  
 public class Camera {
-     
-    private Vector3f position = new Vector3f(0,20,20);
-    private float pitch = 10;
-    private float yaw ;
-    private float roll;
-     
-    public Camera(){}
-     
-    public void move(){
-        if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-            position.z-=0.8f;
-            
-        }
-        if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-            position.z+=0.8f;
-        }
-        if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-        	//yaw += 0.4f;
-            position.x+=0.8f;
-        }
-        if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-            position.x-=0.8f;
-            //yaw -= 0.4f;
-        }
-        if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-            position.y+=0.8f;
-        }
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-            position.y-=0.8f;
-        }
-    }
- 
-    public Vector3f getPosition() {
-        return position;
-    }
- 
-    public float getPitch() {
-        return pitch;
-    }
- 
-    public float getYaw() {
-        return yaw;
-    }
- 
-    public float getRoll() {
-        return roll;
-    }
-     
-     
- 
+
+	private Vector3f position;
+	private float pitch = 10;
+	private float yaw;
+
+	private Player player;
+
+	public Camera(Player player) {
+		this.player = player;
+		this.position = player.getPosition();
+	}
+
+	public void move() {
+		calculatePitch();
+		calculateCameraPosition();
+
+		this.yaw = 180 - player.getRotY();
+	}
+
+	public Vector3f getPosition() {
+		return position;
+	}
+
+	public float getPitch() {
+		return pitch;
+	}
+
+	public float getYaw() {
+		return yaw;
+	}
+
+	private void calculateCameraPosition() {
+		position = new Vector3f(player.getPosition());
+		position.y += 5;
+	}
+
+	private void calculatePitch() {
+		float pitchChange = Mouse.getDY() * 0.1f;
+		pitch -= pitchChange;
+
+		// Limita inclinação: não permite olhas pros pés ou pro céu
+		pitch = Math.min(pitch, 22);
+		pitch = Math.max(pitch, -30);
+	}
+
 }
