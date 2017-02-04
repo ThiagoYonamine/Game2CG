@@ -106,7 +106,7 @@ public class MainGameLoop {
 		//Zombie zombie = new Zombie(tx_zombie, new Vector3f(0, 5, -100), 0, 0, 0, 5);
 		List<Zombie> zombies = new ArrayList<Zombie>();
 		for (int i = 0; i < 20; i++) {
-			zombies.add(new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600), 0, 0, 0, 5));
+			zombies.add(new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600), 0, 0, 0, 5,random.nextFloat()%1 ));
 		}
 		
 		// hide the mouse

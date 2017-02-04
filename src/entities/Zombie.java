@@ -5,11 +5,12 @@ import models.TexturedModel;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Zombie extends Entity{
-	private float speed = 0.2f;
+	private float speed;
 
 	public Zombie(TexturedModel model, Vector3f position, float rotX,
-			float rotY, float rotZ, float scale) {
+			float rotY, float rotZ, float scale, float speed) {
 		super(model, position, rotX, rotY, rotZ, scale);
+		this.speed = speed;
 
 	}
 	public void move(Vector3f playerPosition, float roty) {
