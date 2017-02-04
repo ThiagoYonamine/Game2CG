@@ -44,8 +44,9 @@ public class Camera {
 		float pitchChange = Mouse.getDY() * 0.1f;
 		pitch -= pitchChange;
 
-		// Limita inclinação: não permite olhas pros pés
+		// Limita inclinação: não permite olhas pros pés ou pro céu
 		pitch = Math.min(pitch, 22);
+		pitch = Math.max(pitch, -30);
 	}
 
 }
