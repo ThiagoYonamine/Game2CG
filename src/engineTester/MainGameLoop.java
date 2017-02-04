@@ -137,6 +137,10 @@ public class MainGameLoop {
 						player.increasePosition(0, 0, -2);	
 					else
 						player.increasePosition(0, 0, 2);	
+					if(px < v.getX())
+						player.increasePosition(-2, 0, 0);
+					else
+						player.increasePosition(2, 0, 0);
 				
 				}
 				
