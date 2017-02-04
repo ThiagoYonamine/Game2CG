@@ -106,12 +106,23 @@ public class MainGameLoop {
 		
 		boolean andar = true;
 		while (!Display.isCloseRequested()) {
-			if(andar)
+			
 			player.move();
 
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
+			renderer.processEntity(entityDragon); // 0 0 -40
+			//teste colisao
+			float px = player.getPosition().getX();
+			float pz = player.getPosition().getZ();
+			if(pz <= -35 && px >= -5 && px <= 5 && pz >= -45){
+				if(pz < -40)
+					player.increasePosition(0, 0, -1);	
+				else
+					player.increasePosition(0, 0, 1);	
+				
+			}
 			for (Entity entity : entities) {
 				Vector3f v = entity.getPosition();
 				renderer.processEntity(entity);
@@ -120,12 +131,15 @@ public class MainGameLoop {
 				/*float px = player.getPosition().getX();
 				float py = player.getPosition().getY();
 				float pz = player.getPosition().getZ();
-				if((pz <= v.getZ()-2  && px <= v.getX()+2 && px >= v.getX()-2) ){
-					andar = false;
+				*/
+				if(pz <= v.getZ()+2 && px >= v.getX()-2  && px <= v.getX()+2  && pz >= v.getZ()-2 ){
+					if(pz < v.getZ())
+						player.increasePosition(0, 0, -2);	
+					else
+						player.increasePosition(0, 0, 2);	
+				
 				}
-				else{
-					andar = true;
-				}*/
+				
 			}
 			for (Entity entity2 : entities2) {
 				renderer.processEntity(entity2);
@@ -133,15 +147,7 @@ public class MainGameLoop {
 			
 			
 			// entityDragon.increaseRotation(0, 1, 0);
-			renderer.processEntity(entityDragon); // 0 0 -40
-			//teste colisao
-			float px = player.getPosition().getX();
-			float pz = player.getPosition().getZ();
-			if(pz <= -35 && px >= -5 && px <= 5 && pz >= -45){
-				
-				player.increasePosition(0, 0, 3);
-				
-			}
+			
 			
 			entityArma.setPosition(new Vector3f(player.getPosition().x,player.getPosition().y,player.getPosition().z));
 			entityArma.setRotY(player.getRotY()*-1);
