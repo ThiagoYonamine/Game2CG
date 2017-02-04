@@ -48,7 +48,7 @@ public class MainGameLoop {
 		for (int i = 0; i < 200; i++) {
 			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities.add(new Entity(staticModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, (random.nextFloat() * -600)-30), 0, 0, 0, scale));
+					new Vector3f(random.nextFloat() * 800 - 400, 0, (random.nextFloat() * -600) - 30), 0, 0, 0, scale));
 		}
 
 		RawModel model2 = OBJLoader.loadObjModel("fern", loader);
@@ -60,15 +60,16 @@ public class MainGameLoop {
 		for (int i = 0; i < 200; i++) {
 			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities2.add(new Entity(staticModel2,
-					new Vector3f(random.nextFloat() * 800 - 400, -1f, random.nextFloat() * -600), 0, 0, 0, scale/10));
+					new Vector3f(random.nextFloat() * 800 - 400, -1f, random.nextFloat() * -600), 0, 0, 0, scale / 10));
 		}
 		/*
-		RawModel model_tiro = OBJLoader.loadObjModel("pine", loader);
-		TexturedModel tx_tiro = new TexturedModel(model_tiro, new ModelTexture(loader.loadTexture("pine")));
-		List<Entity> tiros = new ArrayList<Entity>();
-		tiros.add(new Entity(tx_tiro,new Vector3f(1, 1f, 1), 0, 0, 0, 1));
-		*/
-		
+		 * RawModel model_tiro = OBJLoader.loadObjModel("pine", loader);
+		 * TexturedModel tx_tiro = new TexturedModel(model_tiro, new
+		 * ModelTexture(loader.loadTexture("pine"))); List<Entity> tiros = new
+		 * ArrayList<Entity>(); tiros.add(new Entity(tx_tiro,new Vector3f(1, 1f,
+		 * 1), 0, 0, 0, 1));
+		 */
+
 		RawModel dragonOBJ = OBJLoader.loadObjModel("dragon", loader);
 		TexturedModel dragon = new TexturedModel(dragonOBJ, new ModelTexture(loader.loadTexture("verde")));
 		ModelTexture dragon_texture = dragon.getTexture();
@@ -77,15 +78,14 @@ public class MainGameLoop {
 		dragon_texture.setReflectivity(50); // reflexo
 
 		Entity entityDragon = new Entity(dragon, new Vector3f(0, 0, -40), 0, 0, 0, 1);
-		
+
 		RawModel model_arma = OBJLoader.loadObjModel("arma", loader);
 		TexturedModel tx_arma = new TexturedModel(model_arma, new ModelTexture(loader.loadTexture("arma")));
 		ModelTexture texture_arma = tx_arma.getTexture();
 		// Reflexo
 		texture_arma.setShineDamper(50); // tipo do material
 		texture_arma.setReflectivity(20); // reflexo
-		
-		
+
 		Entity entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), 0, 0, 0, 0.5f);
 		entityArma.increaseRotation(180, 0, 0);
 
@@ -99,64 +99,63 @@ public class MainGameLoop {
 
 		Player player = new Player(player_model, new Vector3f(0, 5, 0), 0, 0, 0, 0.5f);
 		player.increaseRotation(180, 0, 0);
-		
 
 		// hide the mouse
 		Mouse.setGrabbed(true);
-		
+
 		boolean andar = true;
 		while (!Display.isCloseRequested()) {
-			
+
 			player.move();
 
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entityDragon); // 0 0 -40
-			//teste colisao
+			// teste colisao
 			float px = player.getPosition().getX();
 			float pz = player.getPosition().getZ();
-			if(pz <= -35 && px >= -5 && px <= 5 && pz >= -45){
-				if(pz < -40)
-					player.increasePosition(0, 0, -1);	
+			if (pz <= -35 && px >= -5 && px <= 5 && pz >= -45) {
+				if (pz < -40)
+					player.increasePosition(0, 0, -1);
 				else
-					player.increasePosition(0, 0, 1);	
-				
+					player.increasePosition(0, 0, 1);
+
 			}
 			for (Entity entity : entities) {
 				Vector3f v = entity.getPosition();
 				renderer.processEntity(entity);
-				
-				//todo ??? colisõa
-				/*float px = player.getPosition().getX();
-				float py = player.getPosition().getY();
-				float pz = player.getPosition().getZ();
-				*/
-				if(pz <= v.getZ()+2 && px >= v.getX()-2  && px <= v.getX()+2  && pz >= v.getZ()-2 ){
-					if(pz < v.getZ())
-						player.increasePosition(0, 0, -2);	
+
+				// todo ??? colisõa
+				/*
+				 * float px = player.getPosition().getX(); float py =
+				 * player.getPosition().getY(); float pz =
+				 * player.getPosition().getZ();
+				 */
+				if (pz <= v.getZ() + 2 && px >= v.getX() - 2 && px <= v.getX() + 2 && pz >= v.getZ() - 2) {
+					if (pz < v.getZ())
+						player.increasePosition(0, 0, -2);
 					else
-						player.increasePosition(0, 0, 2);	
-					if(px < v.getX())
+						player.increasePosition(0, 0, 2);
+					if (px < v.getX())
 						player.increasePosition(-2, 0, 0);
 					else
 						player.increasePosition(2, 0, 0);
-				
+
 				}
-				
+
 			}
 			for (Entity entity2 : entities2) {
 				renderer.processEntity(entity2);
 			}
-			
-			
+
 			// entityDragon.increaseRotation(0, 1, 0);
-			
-			
-			entityArma.setPosition(new Vector3f(player.getPosition().x,player.getPosition().y,player.getPosition().z));
-			entityArma.setRotY(player.getRotY()*-1);
+
+			entityArma
+					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
+			entityArma.setRotY(player.getRotY() * -1);
 			renderer.processEntity(entityArma);
-			
+
 			renderer.render(light, player.getCamera());
 			DisplayManager.updateDisplay();
 		}
