@@ -36,6 +36,7 @@ public class Player extends Entity {
 		walkForward(distanceForward);
 		walkSideward(distanceSideward);
 		this.camera.move();
+		Mouse.setCursorPosition(0, 0);
 	}
 
 	private void checkInputs() {
