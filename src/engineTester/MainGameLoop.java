@@ -7,6 +7,7 @@ import java.util.Random;
 import models.RawModel;
 import models.TexturedModel;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -114,6 +115,9 @@ public class MainGameLoop {
 		
 		boolean andar = true;
 		while (!Display.isCloseRequested()) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_M)) {
+				player.increasePosition(0, 0, -1);	
+			}
 			
 			player.move();
 			for(Zombie zombie : zombies){
