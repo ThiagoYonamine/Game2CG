@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import models.RawModel;
 import models.TexturedModel;
 
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -20,6 +21,7 @@ import renderEngine.Loader;
 import renderEngine.MasterRender;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
+import toolBox.Time;
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
@@ -29,16 +31,18 @@ import entities.Light;
 import entities.Player;
 import entities.Zombie;
 
+
 public class MainGameLoop {
 
 	private final static int MIN_TREE_HEIGHT = 1;
 	private final static int MAX_TREE_HEIGHT = 4;
 
+
 	public static void main(String[] args) {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-
+	    
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
@@ -134,7 +138,7 @@ public class MainGameLoop {
 				renderer.processEntity(zombie);
 			}
 
-			renderer.processEntity(player);
+			//renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entityDragon); // 0 0 -40
@@ -153,12 +157,8 @@ public class MainGameLoop {
 				renderer.processEntity(entity);
 
 				// todo ??? colisõa
-				/*
-				 * float px = player.getPosition().getX(); float py =
-				 * player.getPosition().getY(); float pz =
-				 * player.getPosition().getZ();
-				 */
-				if (pz <= v.getZ() + 2 && px >= v.getX() - 2 && px <= v.getX() + 2 && pz >= v.getZ() - 2) {
+		
+				if (pz <= v.getZ() + 3 && px >= v.getX() - 3 && px <= v.getX() + 3 && pz >= v.getZ() - 3) {
 					if (pz < v.getZ())
 						player.increasePosition(0, 0, -2);
 					else
@@ -181,8 +181,8 @@ public class MainGameLoop {
 					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
 			entityArma.setRotY(player.getRotY() * -1);
 			renderer.processEntity(entityArma);
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_M) && ptiro) {
+			
+			if (Mouse.isButtonDown(0) && Time.getDelta()>100) {
 
 				Bala b = new Bala(tx_bala,
 						new Vector3f(player.getPosition().x, player.getPosition().y + 3, player.getPosition().z), 0,
@@ -214,5 +214,7 @@ public class MainGameLoop {
 		DisplayManager.closeDisplay();
 
 	}
+	
+
 
 }

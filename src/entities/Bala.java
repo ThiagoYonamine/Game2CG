@@ -20,7 +20,7 @@ public class Bala extends Entity{
 		
 	}
 	public void move() {
-		increasePosition((float) Math.sin(direcao), 0, (float) Math.cos(direcao));
+		increasePosition((float) Math.sin(direcao)*2, 0, (float) Math.cos(direcao)*2);
 		tempo++;
 	}
 	
