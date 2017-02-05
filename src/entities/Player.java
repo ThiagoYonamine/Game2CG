@@ -16,13 +16,12 @@ public class Player extends Entity {
 	private float currentForwardSpeed = 0;
 	private float currentSidewardSpeed = 0;
 	private float currentTurnSpeed = 0;
-	
 
 	private Camera camera;
 
-	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-		super(model, position, rotX, rotY, rotZ, scale);
-		
+	public Player(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size) {
+		super(model, position, rots, scale, size);
+
 		camera = new Camera(this);
 	}
 
@@ -31,7 +30,7 @@ public class Player extends Entity {
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distanceForward = currentForwardSpeed * DisplayManager.getFrameTimeSeconds();
 		float distanceSideward = currentSidewardSpeed * DisplayManager.getFrameTimeSeconds();
-		
+
 		walkForward(distanceForward);
 		walkSideward(distanceSideward);
 		this.camera.move();
