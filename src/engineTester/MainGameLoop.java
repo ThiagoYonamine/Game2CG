@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import Textures.ModelTexture;
@@ -18,6 +19,8 @@ import entities.Entity;
 import entities.Light;
 import entities.Player;
 import entities.Zombie;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import models.RawModel;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
@@ -44,7 +47,18 @@ public class MainGameLoop {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap2"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-
+		//GUIs
+		List<GuiTexture> guis = new ArrayList<GuiTexture>();
+		GuiTexture life = new GuiTexture(loader.loadTexture("life"),new Vector2f(-0.8f,-0.8f), new Vector2f(0.1f,0.175f));
+		GuiTexture life2 = new GuiTexture(loader.loadTexture("life"),new Vector2f(-0.7f,-0.8f), new Vector2f(0.1f,0.175f));
+		GuiTexture life3 = new GuiTexture(loader.loadTexture("life"),new Vector2f(-0.6f,-0.8f), new Vector2f(0.1f,0.175f));
+		guis.add(life);
+		guis.add(life2);
+		guis.add(life3);
+		
+		
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		//
 		RawModel model = OBJLoader.loadObjModel("pine", loader);
 		TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("pine")));
 		staticModel.getTexture().setHasTransparency(true);
@@ -85,14 +99,14 @@ public class MainGameLoop {
 		
 		ModelTexture texture_arma = tx_arma.getTexture();
 		// Reflexo
-		texture_arma.setShineDamper(50); // tipo do material
-		texture_arma.setReflectivity(20); // reflexo
+		texture_arma.setShineDamper(5); // tipo do material
+		texture_arma.setReflectivity(2); // reflexo
 
 		Entity entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), new Vector3f(0, 180, 0), 0.5f,
 				new Vector3f(0, 0, 0));
 		entityArma.increaseRotation(180, 0, 0);
 
-		Light light = new Light(new Vector3f(0, 50, -30), new Vector3f(1, 1, 1));
+		Light light = new Light(new Vector3f(0, 50, -30), new Vector3f(0.5f, 0.5f, 0.5f));
 
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
@@ -100,7 +114,7 @@ public class MainGameLoop {
 		MasterRender renderer = new MasterRender();
 		TexturedModel player_model = tx_arma;
 
-		Player player = new Player(player_model, new Vector3f(0, 5, 0), new Vector3f(0, 180, 0), 0.5f,
+		Player player = new Player(player_model, new Vector3f(-440, 5, -370), new Vector3f(0, 0, 0), 0.5f,
 				new Vector3f(2, 2, 2));
 
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
@@ -115,6 +129,10 @@ public class MainGameLoop {
 
 		RawModel model_bala = OBJLoader.loadObjModel("bullet2", loader);
 		TexturedModel tx_bala = new TexturedModel(model_bala, new ModelTexture(loader.loadTexture("mud")));
+		ModelTexture texture_bala = tx_bala.getTexture();
+		// Reflexo
+		texture_arma.setShineDamper(10); // tipo do material
+		texture_arma.setReflectivity(200); // reflexo
 
 		List<Entity> check_collision = new ArrayList<>();
 		check_collision.add(player);
@@ -131,15 +149,17 @@ public class MainGameLoop {
 
 		while (!Display.isCloseRequested()) {
 			player.move();
+			
 			for (Entity zombie : zombies) {
 				((Zombie) zombie).move(player.getPosition(), player.getRotY());
 				renderer.processEntity(zombie);
 			}
 
-			renderer.processEntity(player);
+			//renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entityDragon);
+			
 
 			for (Entity entity : entities) {
 				renderer.processEntity(entity);
@@ -188,11 +208,14 @@ public class MainGameLoop {
 				renderer.processEntity(tiro);
 				tiro.move();
 			}
-
+			
+			
 			renderer.render(light, player.getCamera());
+			guiRenderer.render(guis);
+			
 			DisplayManager.updateDisplay();
 		}
-
+		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
