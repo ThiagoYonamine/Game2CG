@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Bala extends Entity{
 	private double direcao;
+	private int tempo = 0;
 
 	public Bala(TexturedModel model, Vector3f position, float rotX, float rotY,
 			float rotZ, float scale) {
@@ -20,6 +21,11 @@ public class Bala extends Entity{
 	}
 	public void move() {
 		increasePosition((float) Math.sin(direcao), 0, (float) Math.cos(direcao));
+		tempo++;
+	}
+	
+	public int getTempo(){
+		return tempo;
 	}
 
 }

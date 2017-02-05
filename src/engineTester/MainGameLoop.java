@@ -190,6 +190,10 @@ public class MainGameLoop {
 			for(Bala tiro : balas){
 				renderer.processEntity(tiro);
 				tiro.move();	
+				if(tiro.getTempo() > 100){
+					balas.remove(tiro);
+					break;
+				}
 				
 			}
 			
