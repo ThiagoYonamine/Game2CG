@@ -32,7 +32,6 @@ public class Player extends Entity {
 		float distanceForward = currentForwardSpeed * DisplayManager.getFrameTimeSeconds();
 		float distanceSideward = currentSidewardSpeed * DisplayManager.getFrameTimeSeconds();
 		
-		
 		walkForward(distanceForward);
 		walkSideward(distanceSideward);
 		this.camera.move();
