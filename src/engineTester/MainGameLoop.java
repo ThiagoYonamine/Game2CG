@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
@@ -55,6 +56,7 @@ public class MainGameLoop {
 		guis.add(life);
 		guis.add(life2);
 		guis.add(life3);
+		GuiTexture ganhou = new GuiTexture(loader.loadTexture("ganhou"),new Vector2f(0f,0f), new Vector2f(1f,1f));
 		
 		
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
@@ -64,10 +66,16 @@ public class MainGameLoop {
 		staticModel.getTexture().setHasTransparency(true);
 		final List<Entity> entities = new ArrayList<>();
 		Random random = new Random();
-		for (int i = 0; i < 200; i++) {
+		for (int i = 0; i < 110; i++) {
 			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities.add(new Entity(staticModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, (random.nextFloat() * -600) - 30),
+					new Vector3f(random.nextFloat() * - 800, 0, (random.nextFloat() * -750)-30),
+					new Vector3f(0, 0, 0), scale, new Vector3f(5, 10, 5)));
+		}
+		for (int i = 0; i <90; i++) {
+			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
+			entities.add(new Entity(staticModel,
+					new Vector3f(random.nextFloat() * 800 , 0, (random.nextFloat() * -750)-30),
 					new Vector3f(0, 0, 0), scale, new Vector3f(5, 10, 5)));
 		}
 
@@ -89,7 +97,7 @@ public class MainGameLoop {
 		ModelTexture dragon_texture = dragon.getTexture();
 		// Reflexo
 		dragon_texture.setShineDamper(10); // tipo do material
-		dragon_texture.setReflectivity(50); // reflexo
+		dragon_texture.setReflectivity(10); // reflexo
 
 		Entity entityDragon = new Entity(dragon, new Vector3f(0, 0, -40), new Vector3f(0, 0, 0), 1,
 				new Vector3f(5, 5, 5));
@@ -113,6 +121,7 @@ public class MainGameLoop {
 
 		MasterRender renderer = new MasterRender();
 		TexturedModel player_model = tx_arma;
+		//usar -440, 5, -370
 		Player player = new Player(player_model, new Vector3f(-440, 5, -370), new Vector3f(0, 0, 0), 0.5f,
 				new Vector3f(2, 2, 2));
 
@@ -172,8 +181,20 @@ public class MainGameLoop {
 					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
 			entityArma.setRotY(-player.getRotY());
 			renderer.processEntity(entityArma);
+			
+			//TODO chamar funçao ganhou quando colidir com dragon?
+			//trocar KEY_G por colidiu drag?
+			if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+				guis.add(ganhou);
+				while (!Display.isCloseRequested()){			
+					guiRenderer.render(guis);
+					DisplayManager.updateDisplay();
+				}
+				break;
+				
+			}
 
-			long thisTime = System.nanoTime();
+			long thisTime = System.nanoTime();	
 			if (Mouse.isButtonDown(0) && (thisTime - lastShotTime >= 1E6 * SHOT_DEBOUNCE_DELAY)) {
 				lastShotTime = thisTime;
 				Bala b = new Bala(tx_bala,
@@ -198,6 +219,9 @@ public class MainGameLoop {
 				if (z != null) {
 					to_remove.add(tiro);
 					to_remove.add(z);
+					zombies.add(
+							new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
+									new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
 				}
 			}
 			balas.removeAll(to_remove);
@@ -208,6 +232,7 @@ public class MainGameLoop {
 				tiro.move();
 			}
 			
+			//TODO remover um coração se zumbi colidir com player.
 			
 			renderer.render(light, player.getCamera());
 			guiRenderer.render(guis);
