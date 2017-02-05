@@ -6,6 +6,7 @@ import renderEngine.DisplayManager;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Zombie extends Entity {
+	private static float SPEED_INC = 0.2f;
 	private float speed;
 
 	public Zombie(TexturedModel model, Vector3f position, Vector3f rots, float scale, float speed, Vector3f size) {
@@ -14,6 +15,7 @@ public class Zombie extends Entity {
 	}
 
 	public void move(Vector3f playerPosition, float roty) {
+		recalculateSpeed();
 		setRotY(180 + roty);
 		if (playerPosition.getX() > position.getX())
 			increasePosition(speed * DisplayManager.getFrameTimeSeconds(), 0, 0);
@@ -24,6 +26,20 @@ public class Zombie extends Entity {
 			increasePosition(0, 0, speed * DisplayManager.getFrameTimeSeconds());
 		else
 			increasePosition(0, 0, -speed * DisplayManager.getFrameTimeSeconds());
+
+	}
+
+	private void recalculateSpeed() {
+		if (Math.random() < 0.3) {
+			speed += SPEED_INC;
+		}
+
+		if (Math.random() < 0.3) {
+			speed -= SPEED_INC;
+		}
+		
+		speed = Math.max(speed, 30);
+		speed = Math.min(10, speed);
 	}
 
 }
