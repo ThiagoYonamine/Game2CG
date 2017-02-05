@@ -47,7 +47,7 @@ public class MainGameLoop {
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap2"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 
 		RawModel model = OBJLoader.loadObjModel("pine", loader);
@@ -107,7 +107,7 @@ public class MainGameLoop {
 		MasterRender renderer = new MasterRender();
 		TexturedModel player_model = tx_arma;
 
-		Player player = new Player(player_model, new Vector3f(0, 5, 0), 0, 180, 0, 0.5f);
+		Player player = new Player(player_model, new Vector3f(-430, 5, -380), 0, 180, 0, 0.5f);
 		player.increaseRotation(180, 0, 0);
 
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
