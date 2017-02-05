@@ -4,39 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import models.RawModel;
-import models.TexturedModel;
-
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import Textures.ModelTexture;
+import Textures.TerrainTexture;
+import Textures.TerrainTexturePack;
+import entities.Bala;
+import entities.CollisionBox;
+import entities.Entity;
+import entities.Light;
+import entities.Player;
+import entities.Zombie;
+import models.RawModel;
+import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRender;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
-import Textures.ModelTexture;
-import Textures.TerrainTexture;
-import Textures.TerrainTexturePack;
-import entities.CollisionBox;
-import entities.Bala;
-import entities.Entity;
-import entities.Light;
-import entities.Player;
-import entities.Zombie;
 
 public class MainGameLoop {
 
 	private final static int MIN_TREE_HEIGHT = 1;
 	private final static int MAX_TREE_HEIGHT = 4;
+	private final static int SHOT_DEBOUNCE_DELAY = 300;
+
+	private static long lastShotTime = 0L;
 
 	public static void main(String[] args) {
-
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 
@@ -50,13 +48,13 @@ public class MainGameLoop {
 		RawModel model = OBJLoader.loadObjModel("pine", loader);
 		TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("pine")));
 		staticModel.getTexture().setHasTransparency(true);
-		List<Entity> entities = new ArrayList<Entity>();
+		final List<Entity> entities = new ArrayList<>();
 		Random random = new Random();
 		for (int i = 0; i < 200; i++) {
 			float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
 			entities.add(new Entity(staticModel,
 					new Vector3f(random.nextFloat() * 800 - 400, 0, (random.nextFloat() * -600) - 30),
-					new Vector3f(0, 0, 0), scale, new Vector3f(5, 5, 5)));
+					new Vector3f(0, 0, 0), scale, new Vector3f(5, 10, 5)));
 		}
 
 		RawModel model2 = OBJLoader.loadObjModel("fern", loader);
@@ -106,11 +104,11 @@ public class MainGameLoop {
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
 		TexturedModel tx_zombie = new TexturedModel(model_zombie, new ModelTexture(loader.loadTexture("Slasher")));
 
-		List<Zombie> zombies = new ArrayList<Zombie>();
+		List<Entity> zombies = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
 			zombies.add(
 					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
-							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(2.5f, 2.5f, 2.5f)));
+							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(2.5f, 4f, 2.5f)));
 		}
 
 		RawModel model_bala = OBJLoader.loadObjModel("bullet2", loader);
@@ -129,11 +127,10 @@ public class MainGameLoop {
 		// hide the mouse
 		Mouse.setGrabbed(true);
 
-		boolean andar = true;
 		while (!Display.isCloseRequested()) {
 			player.move();
-			for (Zombie zombie : zombies) {
-				zombie.move(player.getPosition(), player.getRotY());
+			for (Entity zombie : zombies) {
+				((Zombie) zombie).move(player.getPosition(), player.getRotY());
 				renderer.processEntity(zombie);
 			}
 
@@ -143,7 +140,6 @@ public class MainGameLoop {
 			renderer.processEntity(entityDragon);
 
 			for (Entity entity : entities) {
-				Vector3f v = entity.getPosition();
 				renderer.processEntity(entity);
 			}
 
@@ -153,11 +149,12 @@ public class MainGameLoop {
 
 			entityArma
 					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
-			entityArma.setRotY(player.getRotY() * -1);
+			entityArma.setRotY(0);
 			renderer.processEntity(entityArma);
 
-			if (Mouse.isButtonDown(0)) {
-
+			long thisTime = System.nanoTime();
+			if (Mouse.isButtonDown(0) && (thisTime - lastShotTime >= 1E6 * SHOT_DEBOUNCE_DELAY)) {
+				lastShotTime = thisTime;
 				Bala b = new Bala(tx_bala,
 						new Vector3f(player.getPosition().x, player.getPosition().y + 3, player.getPosition().z),
 						new Vector3f(0, player.getRotY(), 0), 0.1f, new Vector3f(1, 1, 1));
@@ -169,9 +166,21 @@ public class MainGameLoop {
 			balas.removeIf(new Predicate<Bala>() {
 				@Override
 				public boolean test(Bala x) {
-					return x.getTempo() > 100;
+					// remove balas que estão longe ou que colidem com árvores
+					return x.getTempo() > 100 || x.collides(entities) != null;
 				}
 			});
+
+			List<Entity> to_remove = new ArrayList<>();
+			for (Bala tiro : balas) {
+				Entity z = tiro.collides(zombies);
+				if (z != null) {
+					to_remove.add(tiro);
+					to_remove.add(z);
+				}
+			}
+			balas.removeAll(to_remove);
+			zombies.removeAll(to_remove);
 
 			for (Bala tiro : balas) {
 				renderer.processEntity(tiro);

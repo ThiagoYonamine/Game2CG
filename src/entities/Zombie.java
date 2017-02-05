@@ -1,9 +1,9 @@
 package entities;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import models.TexturedModel;
 import renderEngine.DisplayManager;
-
-import org.lwjgl.util.vector.Vector3f;
 
 public class Zombie extends Entity {
 	private static float SPEED_INC = 0.2f;

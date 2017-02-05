@@ -5,18 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import models.TexturedModel;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import shaders.StaticShader;
-import shaders.TerrainShader;
-import terrains.Terrain;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import models.TexturedModel;
+import shaders.StaticShader;
+import shaders.TerrainShader;
+import terrains.Terrain;
 
 public class MasterRender {
 

@@ -2,21 +2,19 @@ package renderEngine;
  
 import java.util.List;
 import java.util.Map;
- 
-import models.RawModel;
-import models.TexturedModel;
- 
-import org.lwjgl.opengl.Display;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
- 
-import shaders.StaticShader;
+
 import Textures.ModelTexture;
-import toolBox.Maths;
 import entities.Entity;
+import models.RawModel;
+import models.TexturedModel;
+import shaders.StaticShader;
+import toolBox.Maths;
  
 public class EntityRenderer {
  

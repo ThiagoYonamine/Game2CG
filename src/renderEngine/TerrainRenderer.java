@@ -1,21 +1,18 @@
 package renderEngine;
  
 import java.util.List;
- 
-import models.RawModel;
-import models.TexturedModel;
- 
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
- 
+
+import Textures.TerrainTexturePack;
+import models.RawModel;
 import shaders.TerrainShader;
 import terrains.Terrain;
-import Textures.ModelTexture;
-import Textures.TerrainTexturePack;
 import toolBox.Maths;
  
 public class TerrainRenderer {

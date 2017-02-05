@@ -1,10 +1,10 @@
 package entities;
 
-import models.TexturedModel;
-
 import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
+
+import models.TexturedModel;
 
 public class Entity {
 
@@ -33,25 +33,34 @@ public class Entity {
 		return CollisionBox.collides(this.cbox);
 	}
 
+	public Entity collides(List<Entity> entities) {
+		for (Entity e : entities) {
+			if (collides(e))
+				return e;
+		}
+		return null;
+	}
+
 	public CollisionBox getCollisionBox() {
 		return cbox;
 	}
 
-	public void increasePosition(float dx, float dy, float dz) {
+	public void increasePosition(float dx, float dy, float dz, boolean force) {
 		this.position.x += dx;
 		this.position.y += dy;
 		this.position.z += dz;
 
-		/*
-		 * if (this instanceof Player){
-		 * System.out.println("checking collision"); }
-		 */
-
-		if (collides()) {
-			this.position.y -= dy;
-			this.position.x -= dx - 0.1;
-			this.position.z -= dz;
+		if (!force) {
+			if (collides()) {
+				this.position.y -= dy;
+				this.position.x -= dx - 0.1;
+				this.position.z -= dz;
+			}
 		}
+	}
+
+	public void increasePosition(float dx, float dy, float dz) {
+		increasePosition(dx, dy, dz, false);
 	}
 
 	public void increaseRotation(float dx, float dy, float dz) {

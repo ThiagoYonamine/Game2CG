@@ -17,6 +17,14 @@ public class CollisionBox {
 		this.rots = rots;
 	}
 
+	@Override
+	public String toString() {
+		String out = "";
+		out += position.x + " " + position.y + " " + position.z + "\t";
+		out += size.x + " " + size.y + " " + size.z + "\t";
+		return out;
+	}
+
 	public static boolean collides(CollisionBox c1, CollisionBox c2) {
 		if (c1 == c2)
 			return false;
