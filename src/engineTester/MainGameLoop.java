@@ -3,6 +3,9 @@ package engineTester;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import models.RawModel;
 import models.TexturedModel;
@@ -21,6 +24,7 @@ import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
 import entities.CollisionBox;
+import entities.Bala;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
@@ -109,6 +113,9 @@ public class MainGameLoop {
 							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(2.5f, 2.5f, 2.5f)));
 		}
 
+		RawModel model_bala = OBJLoader.loadObjModel("bullet2", loader);
+		TexturedModel tx_bala = new TexturedModel(model_bala, new ModelTexture(loader.loadTexture("mud")));
+
 		List<Entity> check_collision = new ArrayList<>();
 		check_collision.add(player);
 		check_collision.add(entityDragon);
@@ -116,6 +123,8 @@ public class MainGameLoop {
 		check_collision.addAll(zombies);
 
 		CollisionBox.setEntities(check_collision);
+
+		List<Bala> balas = new ArrayList<Bala>();
 
 		// hide the mouse
 		Mouse.setGrabbed(true);
@@ -131,7 +140,7 @@ public class MainGameLoop {
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
-			renderer.processEntity(entityDragon); // 0 0 -40
+			renderer.processEntity(entityDragon);
 
 			for (Entity entity : entities) {
 				Vector3f v = entity.getPosition();
@@ -142,12 +151,32 @@ public class MainGameLoop {
 				renderer.processEntity(entity2);
 			}
 
-			// entityDragon.increaseRotation(0, 1, 0);
-
 			entityArma
 					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
 			entityArma.setRotY(player.getRotY() * -1);
 			renderer.processEntity(entityArma);
+
+			if (Mouse.isButtonDown(0)) {
+
+				Bala b = new Bala(tx_bala,
+						new Vector3f(player.getPosition().x, player.getPosition().y + 3, player.getPosition().z),
+						new Vector3f(0, player.getRotY(), 0), 0.1f, new Vector3f(1, 1, 1));
+
+				b.atira(player.getRotY());
+				balas.add(b);
+			}
+
+			balas.removeIf(new Predicate<Bala>() {
+				@Override
+				public boolean test(Bala x) {
+					return x.getTempo() > 100;
+				}
+			});
+
+			for (Bala tiro : balas) {
+				renderer.processEntity(tiro);
+				tiro.move();
+			}
 
 			renderer.render(light, player.getCamera());
 			DisplayManager.updateDisplay();
