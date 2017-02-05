@@ -42,7 +42,7 @@ public class MainGameLoop {
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap2"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 
 		RawModel model = OBJLoader.loadObjModel("pine", loader);
@@ -82,6 +82,7 @@ public class MainGameLoop {
 
 		RawModel model_arma = OBJLoader.loadObjModel("arma", loader);
 		TexturedModel tx_arma = new TexturedModel(model_arma, new ModelTexture(loader.loadTexture("arma")));
+		
 		ModelTexture texture_arma = tx_arma.getTexture();
 		// Reflexo
 		texture_arma.setShineDamper(50); // tipo do material
@@ -89,6 +90,7 @@ public class MainGameLoop {
 
 		Entity entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), new Vector3f(0, 180, 0), 0.5f,
 				new Vector3f(0, 0, 0));
+		entityArma.increaseRotation(180, 0, 0);
 
 		Light light = new Light(new Vector3f(0, 50, -30), new Vector3f(1, 1, 1));
 
@@ -149,7 +151,7 @@ public class MainGameLoop {
 
 			entityArma
 					.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
-			entityArma.setRotY(0);
+			entityArma.setRotY(-player.getRotY());
 			renderer.processEntity(entityArma);
 
 			long thisTime = System.nanoTime();
