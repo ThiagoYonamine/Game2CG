@@ -99,21 +99,20 @@ public class MainGameLoop {
 		
 		ModelTexture texture_arma = tx_arma.getTexture();
 		// Reflexo
-		texture_arma.setShineDamper(5); // tipo do material
-		texture_arma.setReflectivity(2); // reflexo
+		texture_arma.setShineDamper(10); // tipo do material
+		texture_arma.setReflectivity(15); // reflexo
 
 		Entity entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), new Vector3f(0, 180, 0), 0.5f,
 				new Vector3f(0, 0, 0));
 		entityArma.increaseRotation(180, 0, 0);
 
-		Light light = new Light(new Vector3f(0, 50, -30), new Vector3f(0.5f, 0.5f, 0.5f));
+		Light light = new Light(new Vector3f(0, 9000, -5000), new Vector3f(0.2f, 0.2f, 0.2f));
 
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
 
 		MasterRender renderer = new MasterRender();
 		TexturedModel player_model = tx_arma;
-
 		Player player = new Player(player_model, new Vector3f(-440, 5, -370), new Vector3f(0, 0, 0), 0.5f,
 				new Vector3f(2, 2, 2));
 
@@ -131,8 +130,8 @@ public class MainGameLoop {
 		TexturedModel tx_bala = new TexturedModel(model_bala, new ModelTexture(loader.loadTexture("mud")));
 		ModelTexture texture_bala = tx_bala.getTexture();
 		// Reflexo
-		texture_arma.setShineDamper(10); // tipo do material
-		texture_arma.setReflectivity(200); // reflexo
+		texture_bala.setShineDamper(10); // tipo do material
+		texture_bala.setReflectivity(200); // reflexo
 
 		List<Entity> check_collision = new ArrayList<>();
 		check_collision.add(player);
