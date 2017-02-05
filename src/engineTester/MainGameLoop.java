@@ -111,7 +111,7 @@ public class MainGameLoop {
 			zombies.add(new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600), 0, 0, 0, 5,random.nextFloat()%1 ));
 		}
 		
-		RawModel model_bala = OBJLoader.loadObjModel("bullet", loader);
+		RawModel model_bala = OBJLoader.loadObjModel("bullet2", loader);
 		TexturedModel tx_bala = new TexturedModel(model_bala, new ModelTexture(loader.loadTexture("mud")));	
 		//tx_bala.getTexture().setHasTransparency(true);
 		
@@ -180,7 +180,7 @@ public class MainGameLoop {
 			
 			if (Keyboard.isKeyDown(Keyboard.KEY_M )&& ptiro) {
 				
-				Bala b = new Bala(tx_bala, new Vector3f(player.getPosition().x,player.getPosition().y+2,player.getPosition().z), 0, 0, 0, 0.1f);
+				Bala b = new Bala(tx_bala, new Vector3f(player.getPosition().x,player.getPosition().y+3,player.getPosition().z), 0, player.getRotY(), 0, 0.1f);
 				
 				b.atira(player.getRotY());
 				balas.add(b);
