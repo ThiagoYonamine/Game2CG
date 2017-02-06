@@ -53,8 +53,8 @@ public class Entity {
 		if (!force) {
 			if (collides()) {
 				this.position.y -= dy;
-				this.position.x -= dx - 0.1;
-				this.position.z -= dz;
+				this.position.x -= dx + (float) Math.random() * 2;
+				this.position.z -= dz + (float) Math.random() * 2;
 			}
 		}
 	}

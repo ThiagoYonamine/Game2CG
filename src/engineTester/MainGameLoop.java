@@ -150,7 +150,7 @@ public class MainGameLoop {
 		TexturedModel player_model = tx_arma;
 		// usar -440, 5, -370
 		player = new Player(player_model, new Vector3f(-440, 5, -370), new Vector3f(0, 0, 0), 0.5f,
-				new Vector3f(4, 4, 4));
+				new Vector3f(10, 7, 10));
 
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
 		tx_zombie = new TexturedModel(model_zombie, new ModelTexture(loader.loadTexture("Slasher")));
@@ -162,7 +162,7 @@ public class MainGameLoop {
 		texture_bala.setShineDamper(10); // tipo do material
 		texture_bala.setReflectivity(200); // reflexo
 
-		check_collision.add(player);
+		//check_collision.add(player);
 		check_collision.addAll(entities);
 
 		CollisionBox.setEntities(check_collision);
@@ -190,15 +190,19 @@ public class MainGameLoop {
 		}
 
 		for (Entity zombie : zombies) {
+			((Zombie) zombie).move(player.getPosition(), player.getRotY());
+
 			if (CollisionBox.collides(player.getCollisionBox(), zombie.getCollisionBox())) {
 				if (player.is_immune_or_hit(System.nanoTime())) {
 
 					int x = player.lifes();
 					guis.remove(lifes.get(x));
 				}
+				((Zombie) zombie).move(
+						new Vector3f(-player.getPosition().x, player.getPosition().y, -player.getPosition().z),
+						player.getRotY());
 			}
 
-			((Zombie) zombie).move(player.getPosition(), player.getRotY());
 			renderer.processEntity(zombie);
 		}
 
@@ -226,11 +230,11 @@ public class MainGameLoop {
 
 		// TODO chamar funçao ganhou quando colidir com dragon?
 		// trocar KEY_G por colidiu drag?
-//		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-//			guis.add(perdeu);
-//			state = State.WIN;
-//			return;
-//		}
+		// if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+		// guis.add(perdeu);
+		// state = State.WIN;
+		// return;
+		// }
 
 		long thisTime = System.nanoTime();
 		if (Mouse.isButtonDown(0) && (thisTime - lastShotTime >= 1E6 * SHOT_DEBOUNCE_DELAY)) {
@@ -269,7 +273,7 @@ public class MainGameLoop {
 			for (int i = 0; i < zombie_count + 1; ++i) {
 				Zombie z = new Zombie(tx_zombie,
 						new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
-						new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f));
+						new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(7f, 7f, 7f));
 				zombies.add(z);
 				check_collision.add(z);
 			}
@@ -299,10 +303,10 @@ public class MainGameLoop {
 		for (int i = 0; i < 20; i++) {
 			zombies.add(
 					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
-							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
+							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(7f, 7f, 7f)));
 		}
 		check_collision.addAll(zombies);
-		
+
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
