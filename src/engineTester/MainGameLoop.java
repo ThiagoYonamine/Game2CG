@@ -162,7 +162,7 @@ public class MainGameLoop {
 		texture_bala.setShineDamper(10); // tipo do material
 		texture_bala.setReflectivity(200); // reflexo
 
-		//check_collision.add(player);
+		// check_collision.add(player);
 		check_collision.addAll(entities);
 
 		CollisionBox.setEntities(check_collision);
@@ -226,7 +226,8 @@ public class MainGameLoop {
 
 		entityArma.setPosition(new Vector3f(player.getPosition().x, player.getPosition().y, player.getPosition().z));
 		entityArma.setRotY(-player.getRotY());
-		renderer.processEntity(entityArma);
+		entityArma.setRotZ(0);
+		entityArma.setRotX(180);
 
 		// TODO chamar funçao ganhou quando colidir com dragon?
 		// trocar KEY_G por colidiu drag?
@@ -247,7 +248,12 @@ public class MainGameLoop {
 			balas.add(b);
 			audios[Audio.SHOT.ordinal()].play();
 			player.score.increaseShots();
+
+			entityArma.setRotZ(1 * Math.signum(player.getRotY()));
+			entityArma.setRotX(entityArma.getRotX() + 1 * Math.signum(player.getRotY()));
 		}
+
+		renderer.processEntity(entityArma);
 
 		balas.removeIf(new Predicate<Bala>() {
 			@Override

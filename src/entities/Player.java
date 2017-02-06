@@ -110,6 +110,9 @@ public class Player extends Entity {
 		lifes = Player.maxLifes();
 		score.reset();
 		//setPosition(new Vector3f(-440, 5, -370));
+		position.x = -440;
+		position.y = 5;
+		position.z = -370;
 	}
 
 	public int lifes() {
