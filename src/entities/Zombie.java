@@ -6,7 +6,7 @@ import models.TexturedModel;
 import renderEngine.DisplayManager;
 
 public class Zombie extends Entity {
-	private static float SPEED_INC = 0.2f;
+	private static float SPEED_INC = 2.0f;
 	private float speed;
 
 	public Zombie(TexturedModel model, Vector3f position, Vector3f rots, float scale, float speed, Vector3f size) {

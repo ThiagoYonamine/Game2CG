@@ -94,10 +94,6 @@ public class MainGameLoop {
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 
 		// GUIs
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
-		guis.addAll(lifes);
 
 		perdeu = new GuiTexture(loader.loadTexture("perdeu"), new Vector2f(1f, -1f), new Vector2f(2f, 2f));
 
@@ -230,11 +226,11 @@ public class MainGameLoop {
 
 		// TODO chamar funçao ganhou quando colidir com dragon?
 		// trocar KEY_G por colidiu drag?
-		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-			guis.add(perdeu);
-			state = State.WIN;
-			return;
-		}
+//		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+//			guis.add(perdeu);
+//			state = State.WIN;
+//			return;
+//		}
 
 		long thisTime = System.nanoTime();
 		if (Mouse.isButtonDown(0) && (thisTime - lastShotTime >= 1E6 * SHOT_DEBOUNCE_DELAY)) {
@@ -306,6 +302,11 @@ public class MainGameLoop {
 							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
 		}
 		check_collision.addAll(zombies);
+		
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		guis.addAll(lifes);
 	}
 
 	private void just_render() {

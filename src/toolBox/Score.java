@@ -13,7 +13,7 @@ public class Score {
 	}
 
 	public void increaseKills() {
-		kill++;
+		kills++;
 	}
 
 	public void reset() {
