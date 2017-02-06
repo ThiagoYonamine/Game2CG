@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 import renderEngine.DisplayManager;
+import toolBox.Score;
 
 public class Player extends Entity {
 
@@ -21,12 +22,15 @@ public class Player extends Entity {
 	private long last_hit = 0;
 	private Camera camera;
 	private int lifes;
+	
+	public Score score;
 
 	public Player(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size) {
 		super(model, position, rots, scale, size);
 
-		reset();
 		camera = new Camera(this);
+		score = new Score();
+		reset();
 	}
 
 	public boolean is_immune_or_hit(long curr_time) {
@@ -104,6 +108,7 @@ public class Player extends Entity {
 
 	public void reset() {
 		lifes = Player.maxLifes();
+		score.reset();
 		//setPosition(new Vector3f(-440, 5, -370));
 	}
 

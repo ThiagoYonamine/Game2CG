@@ -1,5 +1,6 @@
 package engineTester;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.openal.SoundStore;
 
 import Textures.ModelTexture;
@@ -243,6 +246,7 @@ public class MainGameLoop {
 			b.atira(player.getRotY());
 			balas.add(b);
 			audios[Audio.SHOT.ordinal()].play();
+			player.score.increaseShots();
 		}
 
 		balas.removeIf(new Predicate<Bala>() {
@@ -259,6 +263,7 @@ public class MainGameLoop {
 			if (z != null) {
 				to_remove.add(tiro);
 				to_remove.add(z);
+				player.score.increaseKills();
 
 				zombie_count++;
 			}
@@ -323,6 +328,9 @@ public class MainGameLoop {
 		for (Bala tiro : balas) {
 			renderer.processEntity(tiro);
 		}
+
+		System.out.println("Shots: " + player.score.shots);
+		System.out.println("Kills: " + player.score.kills);
 
 		renderer.render(light, player.getCamera());
 		guiRenderer.render(guis);
