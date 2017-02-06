@@ -59,6 +59,7 @@ public class MainGameLoop {
 	MasterRender renderer;
 	Loader loader;
 	GuiTexture perdeu;
+	List<GuiTexture> numeros;
 	GuiRenderer guiRenderer;
 
 	List<GuiTexture> guis = new ArrayList<>();
@@ -96,6 +97,8 @@ public class MainGameLoop {
 		// GUIs
 
 		perdeu = new GuiTexture(loader.loadTexture("perdeu"), new Vector2f(1f, -1f), new Vector2f(2f, 2f));
+		numeros = new ArrayList<GuiTexture>();
+		numeros.add(new GuiTexture(loader.loadTexture("N2"), new Vector2f(0f, 0f), new Vector2f(0.2f, 0.2f)));
 
 		guiRenderer = new GuiRenderer(loader);
 
@@ -209,6 +212,47 @@ public class MainGameLoop {
 		if (player.lifes() == 0) {
 			state = State.LOSE;
 			guis.add(perdeu);
+			
+			int score = player.score.kills;
+			int i=0;
+			while(score > 0){
+			int num = score % 10;
+			switch (num) {
+			case 0:
+				guis.add(new GuiTexture(loader.loadTexture("N0"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 1:
+				guis.add(new GuiTexture(loader.loadTexture("N1"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 2:
+				guis.add(new GuiTexture(loader.loadTexture("N2"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 3:
+				guis.add(new GuiTexture(loader.loadTexture("N3"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 4:
+				guis.add(new GuiTexture(loader.loadTexture("N4"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 5:
+				guis.add(new GuiTexture(loader.loadTexture("N5"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 6:
+				guis.add(new GuiTexture(loader.loadTexture("N6"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 7:
+				guis.add(new GuiTexture(loader.loadTexture("N7"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 8:
+				guis.add(new GuiTexture(loader.loadTexture("N8"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			case 9:
+				guis.add(new GuiTexture(loader.loadTexture("N9"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+				break;
+			}
+			score = score/10;
+			i++;
+			}
+			
 			return;
 		}
 
