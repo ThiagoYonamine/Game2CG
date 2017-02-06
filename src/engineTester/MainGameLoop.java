@@ -46,7 +46,7 @@ public class MainGameLoop {
 
 	MasterRender renderer;
 	Loader loader;
-	GuiTexture ganhou;
+	GuiTexture perdeu;
 	GuiRenderer guiRenderer;
 
 	List<GuiTexture> guis = new ArrayList<>();
@@ -81,7 +81,7 @@ public class MainGameLoop {
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
 		guis.addAll(lifes);
 
-		ganhou = new GuiTexture(loader.loadTexture("ganhou"), new Vector2f(0f, 0f), new Vector2f(1f, 1f));
+		perdeu = new GuiTexture(loader.loadTexture("perdeu"), new Vector2f(1f, -1f), new Vector2f(2f, 2f));
 
 		guiRenderer = new GuiRenderer(loader);
 
@@ -183,7 +183,7 @@ public class MainGameLoop {
 
 		if (player.lifes() == 0) {
 			state = State.LOSE;
-			guis.add(ganhou);
+			guis.add(perdeu);
 			return;
 		}
 
@@ -206,7 +206,7 @@ public class MainGameLoop {
 		// TODO chamar funçao ganhou quando colidir com dragon?
 		// trocar KEY_G por colidiu drag?
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-			guis.add(ganhou);
+			guis.add(perdeu);
 			state = State.WIN;
 			return;
 		}
@@ -302,14 +302,14 @@ public class MainGameLoop {
 				just_render();
 				cont++;
 				if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-					guis.remove(ganhou);
+					guis.remove(perdeu);
 					reset();
 				}
 			} else if (state == State.LOSE) {
 				just_render();
 				cont++;
 				if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-					guis.remove(ganhou);
+					guis.remove(perdeu);
 					reset();
 				}
 			}
