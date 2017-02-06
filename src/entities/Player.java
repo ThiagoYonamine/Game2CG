@@ -12,17 +12,31 @@ public class Player extends Entity {
 	private static final float WALK_SPEED = 20f;
 	private static final float TURN_SPEED = 10;
 	private static final float RUN_SPEED_FACTOR = 2f;
+	private static final long IMMUNE_TIME = 2;
 
 	private float currentForwardSpeed = 0;
 	private float currentSidewardSpeed = 0;
 	private float currentTurnSpeed = 0;
 
+	private long last_hit = 0;
 	private Camera camera;
+	private int lifes;
 
 	public Player(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size) {
 		super(model, position, rots, scale, size);
 
+		reset();
 		camera = new Camera(this);
+	}
+
+	public boolean is_immune_or_hit(long curr_time) {
+		if (curr_time - last_hit > IMMUNE_TIME * 1E9) {
+			last_hit = curr_time;
+			lifes--;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void move() {
@@ -77,6 +91,18 @@ public class Player extends Entity {
 
 	public Camera getCamera() {
 		return this.camera;
+	}
+
+	public void reset() {
+		lifes = Player.maxLifes();
+	}
+
+	public int lifes() {
+		return lifes;
+	}
+
+	public static int maxLifes() {
+		return 3;
 	}
 
 }
