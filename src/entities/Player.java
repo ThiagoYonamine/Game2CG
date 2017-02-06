@@ -39,9 +39,16 @@ public class Player extends Entity {
 		}
 	}
 
-	public void move() {
+	public int move() {
 		checkInputs();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+
+		boolean running = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+		if (running) {
+			this.currentForwardSpeed *= RUN_SPEED_FACTOR;
+			this.currentSidewardSpeed *= RUN_SPEED_FACTOR;
+		}
+
 		float distanceForward = currentForwardSpeed * DisplayManager.getFrameTimeSeconds();
 		float distanceSideward = currentSidewardSpeed * DisplayManager.getFrameTimeSeconds();
 
@@ -49,6 +56,13 @@ public class Player extends Entity {
 		walkSideward(distanceSideward);
 		this.camera.move();
 		Mouse.setCursorPosition(0, 0);
+
+		if (distanceForward != 0 || distanceSideward != 0) {
+			return running ? 2 : 1;
+		} else {
+			return 0;
+		}
+
 	}
 
 	private void checkInputs() {
@@ -66,11 +80,6 @@ public class Player extends Entity {
 			this.currentSidewardSpeed = -WALK_SPEED;
 		} else {
 			this.currentSidewardSpeed = 0;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			this.currentForwardSpeed *= RUN_SPEED_FACTOR;
-			this.currentSidewardSpeed *= RUN_SPEED_FACTOR;
 		}
 
 		float angleChange = Mouse.getDX() * TURN_SPEED;

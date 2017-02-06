@@ -7,13 +7,16 @@ import java.util.function.Predicate;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.openal.SoundStore;
 
 import Textures.ModelTexture;
 import Textures.TerrainTexture;
 import Textures.TerrainTexturePack;
+import audio.AudioTrack;
 import entities.Bala;
 import entities.CollisionBox;
 import entities.Entity;
@@ -34,6 +37,12 @@ public class MainGameLoop {
 	private enum State {
 		PLAYING, WIN, LOSE
 	};
+
+	private enum Audio {
+		MUSIC, SHOT, WALKING, RUNNING
+	};
+
+	AudioTrack audios[] = new AudioTrack[4];
 
 	private final static int MIN_TREE_HEIGHT = 1;
 	private final static int MAX_TREE_HEIGHT = 4;
@@ -67,6 +76,11 @@ public class MainGameLoop {
 	private void init() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
+
+		audios[Audio.MUSIC.ordinal()] = new AudioTrack("music");
+		audios[Audio.SHOT.ordinal()] = new AudioTrack("shot");
+		audios[Audio.WALKING.ordinal()] = new AudioTrack("walking");
+		audios[Audio.RUNNING.ordinal()] = new AudioTrack("running");
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
@@ -163,10 +177,23 @@ public class MainGameLoop {
 
 		// hide the mouse
 		Mouse.setGrabbed(true);
+
+		audios[Audio.MUSIC.ordinal()].playAsMusic();
 	}
 
 	private void playing() {
-		player.move();
+		int movement = player.move();
+
+		if (movement == 1) {
+			audios[Audio.RUNNING.ordinal()].stop();
+			audios[Audio.WALKING.ordinal()].playAsSoundEffect(true);
+		} else if (movement == 2) {
+			audios[Audio.WALKING.ordinal()].stop();
+			audios[Audio.RUNNING.ordinal()].playAsSoundEffect(true);
+		} else {
+			audios[Audio.WALKING.ordinal()].stop();
+			audios[Audio.RUNNING.ordinal()].stop();
+		}
 
 		for (Entity zombie : zombies) {
 			if (CollisionBox.collides(player.getCollisionBox(), zombie.getCollisionBox())) {
@@ -220,6 +247,7 @@ public class MainGameLoop {
 
 			b.atira(player.getRotY());
 			balas.add(b);
+			audios[Audio.SHOT.ordinal()].play();
 		}
 
 		balas.removeIf(new Predicate<Bala>() {
@@ -314,6 +342,7 @@ public class MainGameLoop {
 				}
 			}
 
+			SoundStore.get().poll(0);
 			DisplayManager.updateDisplay();
 		}
 
@@ -323,6 +352,7 @@ public class MainGameLoop {
 		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
+		AL.destroy();
 		DisplayManager.closeDisplay();
 	}
 
