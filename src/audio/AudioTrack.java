@@ -20,7 +20,7 @@ public class AudioTrack {
 	}
 
 	public void playAsMusic() {
-		audio.playAsMusic(1.0f, 1.0f, true);
+		audio.playAsMusic(1.0f, 0.7f, true);
 	}
 
 	public void stop() {

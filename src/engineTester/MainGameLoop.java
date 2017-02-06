@@ -64,6 +64,7 @@ public class MainGameLoop {
 	List<Entity> zombies = new ArrayList<>();
 	List<Bala> balas = new ArrayList<>();
 	List<GuiTexture> lifes = new ArrayList<>();
+	List<Entity> check_collision = new ArrayList<>();
 
 	private int zombie_count = 0;
 	TexturedModel tx_bala, tx_zombie;
@@ -155,12 +156,6 @@ public class MainGameLoop {
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
 		tx_zombie = new TexturedModel(model_zombie, new ModelTexture(loader.loadTexture("Slasher")));
 
-		for (int i = 0; i < 20; i++) {
-			zombies.add(
-					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
-							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
-		}
-
 		RawModel model_bala = OBJLoader.loadObjModel("bullet2", loader);
 		tx_bala = new TexturedModel(model_bala, new ModelTexture(loader.loadTexture("mud")));
 		ModelTexture texture_bala = tx_bala.getTexture();
@@ -168,10 +163,8 @@ public class MainGameLoop {
 		texture_bala.setShineDamper(10); // tipo do material
 		texture_bala.setReflectivity(200); // reflexo
 
-		List<Entity> check_collision = new ArrayList<>();
 		check_collision.add(player);
 		check_collision.addAll(entities);
-		check_collision.addAll(zombies);
 
 		CollisionBox.setEntities(check_collision);
 
@@ -179,6 +172,8 @@ public class MainGameLoop {
 		Mouse.setGrabbed(true);
 
 		audios[Audio.MUSIC.ordinal()].playAsMusic();
+
+		reset();
 	}
 
 	private void playing() {
@@ -271,15 +266,18 @@ public class MainGameLoop {
 
 		if (zombie_count > 4) {
 			for (int i = 0; i < zombie_count + 1; ++i) {
-				zombies.add(new Zombie(tx_zombie,
+				Zombie z = new Zombie(tx_zombie,
 						new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
-						new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
+						new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f));
+				zombies.add(z);
+				check_collision.add(z);
 			}
 			zombie_count = 0;
 		}
 
 		balas.removeAll(to_remove);
 		zombies.removeAll(to_remove);
+		check_collision.removeAll(to_remove);
 
 		for (Bala tiro : balas) {
 			renderer.processEntity(tiro);
@@ -295,6 +293,14 @@ public class MainGameLoop {
 	private void reset() {
 		player.reset();
 		state = State.PLAYING;
+		zombies.clear();
+
+		for (int i = 0; i < 20; i++) {
+			zombies.add(
+					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
+							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(4f, 4f, 4f)));
+		}
+		check_collision.addAll(zombies);
 	}
 
 	private void just_render() {
@@ -345,7 +351,6 @@ public class MainGameLoop {
 			SoundStore.get().poll(0);
 			DisplayManager.updateDisplay();
 		}
-
 	}
 
 	private void clear() {

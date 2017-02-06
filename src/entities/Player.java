@@ -104,7 +104,7 @@ public class Player extends Entity {
 
 	public void reset() {
 		lifes = Player.maxLifes();
-		setPosition(new Vector3f(-440, 5, -370));
+		//setPosition(new Vector3f(-440, 5, -370));
 	}
 
 	public int lifes() {
