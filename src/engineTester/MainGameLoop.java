@@ -161,6 +161,10 @@ public class MainGameLoop {
 		// Reflexo
 		texture_bala.setShineDamper(10); // tipo do material
 		texture_bala.setReflectivity(200); // reflexo
+		
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
 
 		// check_collision.add(player);
 		check_collision.addAll(entities);
@@ -313,9 +317,7 @@ public class MainGameLoop {
 		}
 		check_collision.addAll(zombies);
 
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
-		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
+		guis.removeAll(lifes);
 		guis.addAll(lifes);
 	}
 
