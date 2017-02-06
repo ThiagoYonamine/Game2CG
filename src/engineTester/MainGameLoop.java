@@ -69,6 +69,7 @@ public class MainGameLoop {
 	List<Bala> balas = new ArrayList<>();
 	List<GuiTexture> lifes = new ArrayList<>();
 	List<Entity> check_collision = new ArrayList<>();
+	List<GuiTexture> scores = new ArrayList<>();
 
 	private int zombie_count = 0;
 	TexturedModel tx_bala, tx_zombie;
@@ -164,7 +165,7 @@ public class MainGameLoop {
 		// Reflexo
 		texture_bala.setShineDamper(10); // tipo do material
 		texture_bala.setReflectivity(200); // reflexo
-		
+
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.8f, -0.8f), new Vector2f(0.1f, 0.175f)));
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.7f, -0.8f), new Vector2f(0.1f, 0.175f)));
 		lifes.add(new GuiTexture(loader.loadTexture("life"), new Vector2f(-0.6f, -0.8f), new Vector2f(0.1f, 0.175f)));
@@ -216,47 +217,57 @@ public class MainGameLoop {
 		if (player.lifes() == 0) {
 			state = State.LOSE;
 			guis.add(perdeu);
-			
+
 			int score = player.score.kills;
-			int i=0;
-			while(score > 0){
-			int num = score % 10;
-			switch (num) {
-			case 0:
-				guis.add(new GuiTexture(loader.loadTexture("N0"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 1:
-				guis.add(new GuiTexture(loader.loadTexture("N1"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 2:
-				guis.add(new GuiTexture(loader.loadTexture("N2"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 3:
-				guis.add(new GuiTexture(loader.loadTexture("N3"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 4:
-				guis.add(new GuiTexture(loader.loadTexture("N4"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 5:
-				guis.add(new GuiTexture(loader.loadTexture("N5"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 6:
-				guis.add(new GuiTexture(loader.loadTexture("N6"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 7:
-				guis.add(new GuiTexture(loader.loadTexture("N7"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 8:
-				guis.add(new GuiTexture(loader.loadTexture("N8"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
-			case 9:
-				guis.add(new GuiTexture(loader.loadTexture("N9"), new Vector2f(0.2f+i*-0.2f, 0f), new Vector2f(0.2f, 0.2f)));
-				break;
+			int i = 0;
+			while (score > 0) {
+				int num = score % 10;
+				switch (num) {
+				case 0:
+					scores.add(new GuiTexture(loader.loadTexture("N0"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 1:
+					scores.add(new GuiTexture(loader.loadTexture("N1"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 2:
+					scores.add(new GuiTexture(loader.loadTexture("N2"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 3:
+					scores.add(new GuiTexture(loader.loadTexture("N3"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 4:
+					scores.add(new GuiTexture(loader.loadTexture("N4"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 5:
+					scores.add(new GuiTexture(loader.loadTexture("N5"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 6:
+					scores.add(new GuiTexture(loader.loadTexture("N6"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 7:
+					scores.add(new GuiTexture(loader.loadTexture("N7"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 8:
+					scores.add(new GuiTexture(loader.loadTexture("N8"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				case 9:
+					scores.add(new GuiTexture(loader.loadTexture("N9"), new Vector2f(0.2f + i * -0.2f, 0f),
+							new Vector2f(0.2f, 0.2f)));
+					break;
+				}
+				score = score / 10;
+				i++;
 			}
-			score = score/10;
-			i++;
-			}
-			
+			guis.addAll(scores);
 			return;
 		}
 
@@ -361,6 +372,8 @@ public class MainGameLoop {
 		}
 		check_collision.addAll(zombies);
 
+		guis.removeAll(scores);
+		scores.clear();
 		guis.removeAll(lifes);
 		guis.addAll(lifes);
 	}
@@ -385,9 +398,6 @@ public class MainGameLoop {
 		for (Bala tiro : balas) {
 			renderer.processEntity(tiro);
 		}
-
-		System.out.println("Shots: " + player.score.shots);
-		System.out.println("Kills: " + player.score.kills);
 
 		renderer.render(light, player.getCamera());
 		guiRenderer.render(guis);

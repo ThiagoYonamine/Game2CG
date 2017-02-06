@@ -34,12 +34,12 @@ public class Zombie extends Entity {
 			speed += SPEED_INC;
 		}
 
-		if (Math.random() < 0.3) {
+		if (Math.random() < 0.1) {
 			speed -= SPEED_INC;
 		}
 
-		speed = Math.max(speed, 30);
-		speed = Math.min(10, speed);
+		speed = Math.min(speed, 25);
+		speed = Math.max(10, speed);
 	}
 
 }
