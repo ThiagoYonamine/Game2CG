@@ -17,16 +17,16 @@ public class Zombie extends Entity {
 	public void move(Vector3f playerPosition, float roty) {
 		recalculateSpeed();
 		setRotY(180 + roty);
-		if (playerPosition.getX() > position.getX())
-			increasePosition(speed * DisplayManager.getFrameTimeSeconds(), 0, 0);
-		else
-			increasePosition(-speed * DisplayManager.getFrameTimeSeconds(), 0, 0);
+		moveTo(playerPosition);
+	}
 
-		if (playerPosition.getZ() > position.getZ())
-			increasePosition(0, 0, speed * DisplayManager.getFrameTimeSeconds());
-		else
-			increasePosition(0, 0, -speed * DisplayManager.getFrameTimeSeconds());
+	private void moveTo(Vector3f pos) {
+		float angle = (float) Math.atan2(pos.x - this.position.x, pos.z - this.position.z);
+		float distance = speed * DisplayManager.getFrameTimeSeconds();
 
+		float dx = distance * (float) Math.sin(angle);
+		float dz = distance * (float) Math.cos(angle);
+		increasePosition(dx, 0, dz);
 	}
 
 	private void recalculateSpeed() {
@@ -37,7 +37,7 @@ public class Zombie extends Entity {
 		if (Math.random() < 0.3) {
 			speed -= SPEED_INC;
 		}
-		
+
 		speed = Math.max(speed, 30);
 		speed = Math.min(10, speed);
 	}
