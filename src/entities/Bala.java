@@ -8,7 +8,7 @@ import renderEngine.DisplayManager;
 public class Bala extends Entity {
 	private double direcao;
 	private int tempo = 0;
-	private static final int SHOT_SPEED = 300;
+	private static final int SHOT_SPEED = 500;
 
 	public Bala(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size) {
 		super(model, position, rots, scale, size);

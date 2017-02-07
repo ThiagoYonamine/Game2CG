@@ -52,9 +52,9 @@ public class Entity {
 
 		if (!force) {
 			if (collides()) {
-				this.position.y -= dy;
-				this.position.x -= dx + (float) Math.random() * 2;
-				this.position.z -= dz + (float) Math.random() * 2;
+				this.position.y -= 2 * dy;
+				this.position.x -= dx * (Math.random() < 0.2 ? (float) Math.random() * -2 : 1);
+				this.position.z -= dz * (Math.random() < 0.2 ? (float) Math.random() * -2 : 1);
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 package engineTester;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,8 +11,6 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.openal.SoundStore;
 
 import Textures.ModelTexture;
@@ -38,7 +35,7 @@ import terrains.Terrain;
 
 public class MainGameLoop {
 	private enum State {
-		PLAYING, WIN, LOSE
+		PLAYING, LOSE
 	};
 
 	private enum Audio {
@@ -220,54 +217,20 @@ public class MainGameLoop {
 
 			int score = player.score.kills;
 			int i = 0;
+			if (score == 0) {
+				scores.add(new GuiTexture(loader.loadTexture("N0"), new Vector2f(0.2f, 0f), new Vector2f(0.2f, 0.2f)));
+			}
 			while (score > 0) {
 				int num = score % 10;
-				switch (num) {
-				case 0:
-					scores.add(new GuiTexture(loader.loadTexture("N0"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 1:
-					scores.add(new GuiTexture(loader.loadTexture("N1"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 2:
-					scores.add(new GuiTexture(loader.loadTexture("N2"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 3:
-					scores.add(new GuiTexture(loader.loadTexture("N3"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 4:
-					scores.add(new GuiTexture(loader.loadTexture("N4"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 5:
-					scores.add(new GuiTexture(loader.loadTexture("N5"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 6:
-					scores.add(new GuiTexture(loader.loadTexture("N6"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 7:
-					scores.add(new GuiTexture(loader.loadTexture("N7"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 8:
-					scores.add(new GuiTexture(loader.loadTexture("N8"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				case 9:
-					scores.add(new GuiTexture(loader.loadTexture("N9"), new Vector2f(0.2f + i * -0.2f, 0f),
-							new Vector2f(0.2f, 0.2f)));
-					break;
-				}
+				scores.add(new GuiTexture(loader.loadTexture("N" + num), new Vector2f(0.2f + i * -0.2f, 0f),
+						new Vector2f(0.2f, 0.2f)));
 				score = score / 10;
 				i++;
 			}
 			guis.addAll(scores);
+
+			audios[Audio.WALKING.ordinal()].stop();
+			audios[Audio.RUNNING.ordinal()].stop();
 			return;
 		}
 
@@ -404,19 +367,11 @@ public class MainGameLoop {
 	}
 
 	private void loop() {
-		while (!Display.isCloseRequested() && cont < 10000) {
+		while (!Display.isCloseRequested()) {
 			if (state == State.PLAYING)
 				playing();
-			else if (state == State.WIN) {
+			else if (state == State.LOSE) {
 				just_render();
-				cont++;
-				if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-					guis.remove(perdeu);
-					reset();
-				}
-			} else if (state == State.LOSE) {
-				just_render();
-				cont++;
 				if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 					guis.remove(perdeu);
 					reset();
