@@ -16,7 +16,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition;
 
-const float density = 0.0050; 	// no master tava 0.0030
+const float density = 0.0100; 	// no master tava 0.0030
 const float gradient = 2.0;	// e 1.5
 
 void main(void){

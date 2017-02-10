@@ -22,11 +22,17 @@ public class Player extends Entity {
 	private long last_hit = 0;
 	private Camera camera;
 	private int lifes;
-	
+
 	public Score score;
 
-	public Player(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size) {
+	Vector3f minPos, maxPos;
+
+	public Player(TexturedModel model, Vector3f position, Vector3f rots, float scale, Vector3f size, Vector3f minPos,
+			Vector3f maxPos) {
 		super(model, position, rots, scale, size);
+
+		this.minPos = minPos;
+		this.maxPos = maxPos;
 
 		camera = new Camera(this);
 		score = new Score();
@@ -94,6 +100,11 @@ public class Player extends Entity {
 		float dx = distance * (float) Math.sin(Math.toRadians(rotY));
 		float dz = distance * (float) Math.cos(Math.toRadians(rotY));
 		increasePosition(dx, 0, dz);
+		this.position.x = Math.min(this.position.x, maxPos.x);
+		this.position.x = Math.max(minPos.x, this.position.x);
+
+		this.position.z = Math.min(this.position.z, maxPos.z);
+		this.position.z = Math.max(minPos.z, this.position.z);
 	}
 
 	public void walkSideward(float distance) {
@@ -109,7 +120,7 @@ public class Player extends Entity {
 	public void reset() {
 		lifes = Player.maxLifes();
 		score.reset();
-		//setPosition(new Vector3f(-440, 5, -370));
+		// setPosition(new Vector3f(-440, 5, -370));
 		position.x = -440;
 		position.y = 5;
 		position.z = -370;

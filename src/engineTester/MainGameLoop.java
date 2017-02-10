@@ -136,13 +136,17 @@ public class MainGameLoop {
 
 		ModelTexture texture_arma = tx_arma.getTexture();
 		// Reflexo
-		texture_arma.setShineDamper(10); // tipo do material
-		texture_arma.setReflectivity(15); // reflexo
+		texture_arma.setShineDamper(5); // tipo do material
+		texture_arma.setReflectivity(20); // reflexo
 
 		entityArma = new Entity(tx_arma, new Vector3f(110, 10, -50), new Vector3f(180, 180, 0), 0.5f,
 				new Vector3f(0, 0, 0));
 
-		light = new Light(new Vector3f(0, 9000, -5000), new Vector3f(0.2f, 0.2f, 0.2f));
+		// light = new Light(new Vector3f(0, 9000, -5000), new Vector3f(0.2f,
+		// 0.2f, 0.2f));
+		// light = new Light(new Vector3f(0, 9000, -5000), new Vector3f(0.5f,
+		// 0.5f, 0.5f));
+		light = new Light(new Vector3f(0, 9000, -5000), new Vector3f(1f, 1f, 1f));
 
 		terrain = new Terrain(0, -1, loader, texturePack, blendMap);
 		terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
@@ -151,7 +155,29 @@ public class MainGameLoop {
 		TexturedModel player_model = tx_arma;
 		// usar -440, 5, -370
 		player = new Player(player_model, new Vector3f(-440, 5, -370), new Vector3f(0, 0, 0), 0.5f,
-				new Vector3f(10, 7, 10));
+				new Vector3f(10, 7, 10), new Vector3f(-600, 0, -550), new Vector3f(650, 0, -150));
+
+		// Adicionar barreiras de árvore
+		{
+			for (int i = -600; i < 650; i += 15) {
+				float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
+				entities.add(new Entity(staticModel, new Vector3f(i, 0, -550), new Vector3f(0, 0, 0), scale,
+						new Vector3f(5, 10, 5)));
+
+				scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
+				entities.add(new Entity(staticModel, new Vector3f(i, 0, -150), new Vector3f(0, 0, 0), scale,
+						new Vector3f(5, 10, 5)));
+			}
+
+			for (int i = -550; i < -150; i += 15) {
+				float scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
+				entities.add(new Entity(staticModel, new Vector3f(-600, 0, i), new Vector3f(0, 0, 0), scale,
+						new Vector3f(5, 10, 5)));
+				scale = MIN_TREE_HEIGHT + (float) Math.random() * (MAX_TREE_HEIGHT - MIN_TREE_HEIGHT);
+				entities.add(new Entity(staticModel, new Vector3f(650, 0, i), new Vector3f(0, 0, 0), scale,
+						new Vector3f(5, 10, 5)));
+			}
+		}
 
 		RawModel model_zombie = OBJLoader.loadObjModel("Slasher", loader);
 		tx_zombie = new TexturedModel(model_zombie, new ModelTexture(loader.loadTexture("Slasher")));
@@ -169,7 +195,6 @@ public class MainGameLoop {
 
 		// check_collision.add(player);
 		check_collision.addAll(entities);
-
 		CollisionBox.setEntities(check_collision);
 
 		// hide the mouse
@@ -330,7 +355,7 @@ public class MainGameLoop {
 
 		for (int i = 0; i < 20; i++) {
 			zombies.add(
-					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 800 - 400, 5, random.nextFloat() * -600),
+					new Zombie(tx_zombie, new Vector3f(random.nextFloat() * 1600 - 800, 5, random.nextFloat() * -750),
 							new Vector3f(0, 0, 0), 5, random.nextFloat() * 20, new Vector3f(7f, 7f, 7f)));
 		}
 		check_collision.addAll(zombies);
