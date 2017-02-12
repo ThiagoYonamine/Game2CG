@@ -9,12 +9,12 @@ public class CollisionBox {
 	private static List<Entity> entities;
 	private Vector3f size;
 	private Vector3f position;
-	private Vector3f rots;
+//	private Vector3f rots;
 
 	public CollisionBox(Vector3f position, Vector3f size, Vector3f rots) {
 		this.position = position;
 		this.size = size;
-		this.rots = rots;
+//		this.rots = rots;
 	}
 
 	@Override
